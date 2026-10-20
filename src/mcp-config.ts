@@ -1,5 +1,5 @@
 import { readFile } from 'node:fs/promises';
-import { join, relative } from 'node:path';
+import { join, relative, resolve } from 'node:path';
 import { ConfigError } from './errors.js';
 import { loadMarketplaceMcpServers, type MarketplaceRegistry } from './marketplaces.js';
 import {
@@ -214,7 +214,7 @@ export interface ResolveMcpServersOptions {
  *    agent works on, so a merge request could otherwise make the agent spawn a
  *    process of its choosing on the runner.
  * 2. Every spec in `config.mcp`, in the order given: a `file:` spec loads a
- *    standalone document, a `<marketplace>:<plugin>[/<server>]` spec loads from
+ *    standalone document (a relative path resolves from `cwd`), a `<marketplace>:<plugin>[/<server>]` spec loads from
  *    the registered marketplace. A later spec's server overrides an earlier one
  *    (from any source) of the same name.
  * 3. `disabledMcpServers` from `.claude/settings.json` (and `settings.local.json`)
@@ -254,7 +254,7 @@ export async function resolveMcpServers(
       const spec = parseMcpSpec(raw);
       const servers =
         spec.protocol === 'file'
-          ? await loadFileMcpServers(spec.path, options, warn)
+          ? await loadFileMcpServers(resolve(cwd, spec.path), options, warn)
           : await loadMarketplaceMcpServers(spec, registry, {
               cacheDir: options.cacheDir,
               vars: options.vars,

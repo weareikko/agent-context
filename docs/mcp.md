@@ -9,7 +9,7 @@ This library resolves MCP server **definitions** (`McpServerConfig`). It does no
 Merges the sources in this order. A server declared by a later source replaces an earlier one with the same name.
 
 1. **Repository `.mcp.json` files**, walked from `gitRoot` down to `cwd`, the closest file winning per name. Only when `config.mcpDiscovery` is `true`. `disabledMcpjsonServers` applies to these servers.
-2. **Each spec of `config.mcp`**, in order: `file:<path>` loads a standalone document; `<marketplace>:<plugin>` loads every server of a plugin; `<marketplace>:<plugin>/<server>` loads one.
+2. **Each spec of `config.mcp`**, in order: `file:<path>` loads a standalone document (a relative path resolves from `cwd`); `<marketplace>:<plugin>` loads every server of a plugin; `<marketplace>:<plugin>/<server>` loads one.
 3. **Disable lists**, applied last over every source: `disabledMcpServers` from `.claude/settings.json` and `.claude/settings.local.json` (every level, both files, unioned), plus `config.disableMcp`.
 
 A spec that fails to resolve is skipped with a warning (`Skipping MCP spec "<spec>": …`).

@@ -635,6 +635,21 @@ describe('resolveMcpServers', () => {
     expect(warn).toHaveBeenCalledWith(expect.stringContaining('not-a-valid-spec'));
   });
 
+  it('resolves a relative file: spec from cwd, not the process working directory', async () => {
+    const root = await makeTmp();
+    await writeJson(join(root, 'extra.json'), { rel: { command: 'r' } });
+    const servers = await resolveMcpServers(
+      { mcp: ['file:./extra.json'], disableMcp: [], mcpDiscovery: false },
+      root,
+      root,
+      emptyRegistry,
+      { vars, cacheDir },
+    );
+    expect(servers.map((s) => [s.name, s.source])).toEqual([
+      ['rel', { kind: 'file', path: join(root, 'extra.json') }],
+    ]);
+  });
+
   it('warns and skips a file: spec whose file does not exist', async () => {
     const root = await makeTmp();
     const warn = vi.fn();
