@@ -1,5 +1,8 @@
 # @weareikko/agent-context
 
+> [!IMPORTANT]
+> This repository is archived. `@weareikko/agent-context` now lives in the [weareikko/code-review](https://github.com/weareikko/code-review) monorepo, in [`packages/agent-context`](https://github.com/weareikko/code-review/tree/main/packages/agent-context), with its history. Open issues and pull requests there.
+
 Shared context, skills and MCP configuration for weareikko pi agents.
 
 This library holds what the weareikko agents ([`@weareikko/code-review`](https://github.com/weareikko/code-review) and `code-implementation`) read before they start work on a repository, so that each agent gets the same features from the same code:
